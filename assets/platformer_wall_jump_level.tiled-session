@@ -1,0 +1,43 @@
+{
+    "activeFile": "C:/CMPM 120/CMPM-120-Platformer/assets/platformer_sewage_level.tmx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "C:/CMPM 120/CMPM-120-Platformer/assets/platformer_sewage_level.tmx": {
+            "scale": 0.40199074074074076,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1080.8706668202235,
+                "y": 269.90671426926167
+            }
+        },
+        "C:/CMPM 120/CMPM-120-Platformer/assets/platformer_sewage_level.tmx#kenny_tilemap_packed": {
+            "scaleInDock": 1
+        },
+        "C:/CMPM 120/CMPM-120-Platformer/assets/platformer_sewage_level.tmx#kenny_tilemap_packed2": {
+            "scaleInDock": 1
+        }
+    },
+    "last.exportedFilePath": "C:/CMPM 120/CMPM-120-Wall-Jump-Platformer/assets",
+    "last.imagePath": "C:/CMPM 120/CMPM-120-Wall-Jump-Platformer/assets",
+    "map.height": 30,
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 18,
+    "map.tileWidth": 18,
+    "map.width": 100,
+    "openFiles": [
+        "C:/CMPM 120/CMPM-120-Platformer/assets/platformer_sewage_level.tmx"
+    ],
+    "project": "platformer_wall_jump_level.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "C:/CMPM 120/CMPM-120-Platformer/assets/platformer_sewage_level.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 18,
+        "width": 18
+    }
+}
