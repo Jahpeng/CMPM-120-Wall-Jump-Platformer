@@ -14,7 +14,7 @@ const config = {
         }
     },
     width: 1200,
-    height: 800,
+    height: 700,
     backgroundColor: "#1a1a2e",
     scene: [Load, Platformer] // first scene in the list starts
 };
