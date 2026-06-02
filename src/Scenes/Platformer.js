@@ -48,7 +48,7 @@ class Platformer extends Phaser.Scene {
         this.spacekey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // PLAYER COLLISION
-        this.physics.add.collider(my.sprite.player, this.groundLayer);
+        // this.physics.add.collider(my.sprite.player, this.groundLayer);
 
 
         //PARTICLES
@@ -85,6 +85,130 @@ class Platformer extends Phaser.Scene {
         this.cameras.main.startFollow(my.sprite.player, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
         this.cameras.main.setDeadzone(50, 50);
         this.cameras.main.setZoom(2);
+
+        
+
+
+        // NOTE: Switch system code copied from professor's example
+        //
+        // Switch-controlled items
+        //
+
+        // left-switchable
+        this.leftSwitchable = this.groundLayer.filterTiles((tile) => {
+            if (tile.properties.switchable == "left") {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        // set to invisible -- switch will control visibility
+        for (let tile of this.leftSwitchable) {
+            tile.visible = false;
+        }
+
+        // right-switchable
+        this.rightSwitchable = this.groundLayer.filterTiles((tile) => {
+            if (tile.properties.switchable == "right") {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        // set to invisible -- switch will control visibility
+        for (let tile of this.rightSwitchable) {
+            tile.visible = false;
+        }
+
+        this.switchCollisionOngoing = false;
+
+        // Checks to for conditions under which 
+        // collision detection won't run
+        let collisionProcess = (obj1, obj2) => {
+            // One way collisions
+            if (obj2.properties.oneway) {
+                return false;
+            }
+            
+            // Invisible tiles don't affect the player
+            if (!obj2.visible) {
+                return false;
+            }
+
+            // Handle intersection with the switch
+            // Look for moving left to right (-->)
+            if (obj2.properties.switch
+                && my.sprite.player.body.acceleration.x > 0) {
+                    this.all_switch_swap(11); // My helper function
+                        // obj2.index = 11; // left leaning switch tile
+                        for (let tile of this.leftSwitchable) {
+                            tile.visible = true;
+                        }
+                        for (let tile of this.rightSwitchable) {
+                            tile.visible = false;
+                        }
+                        return false;
+                }
+
+            // Handle intersection with the switch
+            // Look for moving right to left (<--)
+            if (obj2.properties.switch 
+                && my.sprite.player.body.acceleration.x < 0) {
+                        this.all_switch_swap(31); // My helper function
+                        // obj2.index = 31; // right leaning switch tile
+                        for (let tile of this.leftSwitchable) {
+                            tile.visible = false;
+                        }
+                        for (let tile of this.rightSwitchable) {
+                            tile.visible = true;
+                        }
+                        return false;
+                }
+
+            if (obj2.properties.switch && my.sprite.player.body.acceleration.x == 0) {
+                return false; // my addition that fixes exploit that allowed you to stand on switch
+            }
+
+            return true;
+
+        }
+
+        // Handles collisions based on tile property values
+        let propertyCollider = (obj1, obj2) => {
+
+            // Handle intersection with dangerous tiles
+            if (obj2.properties.danger) {
+                // Collided with a danger tile, handle collision
+                my.sprite.player.x = 45;
+                my.sprite.player.y = 45;
+            }
+
+        }
+
+        // Enable collision handling
+        // Parameters are:
+        // obj1 or group1 : the sprite or group that is first party to collision
+        // obj2 or group2 : the sprite or group that is second party to collision
+        // collision handler : a function called upon detected collision
+        // process handler : a function that determines if the collision handler is called
+        this.physics.add.collider(my.sprite.player, this.groundLayer, 
+            propertyCollider, collisionProcess);
+
+        //// END of professor switch code
+    }
+
+    // Helper function I wrote to change all switches to match current state
+    all_switch_swap(id){
+        this.allSwitches = this.groundLayer.filterTiles((tile) => {
+            if (tile.properties.switch){
+                return true;
+            }
+        })
+        for(let swch of this.allSwitches){
+            swch.index = id;
+        }
     }
 
     update(){
