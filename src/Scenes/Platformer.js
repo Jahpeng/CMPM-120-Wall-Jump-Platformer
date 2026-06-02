@@ -227,6 +227,9 @@ class Platformer extends Phaser.Scene {
 
          // PLAYER MOVEMENT (base structure from platformer section assignment)
         if (this.akey.isDown){
+            if (my.sprite.player.body.velocity.x > 0){
+                my.sprite.player.body.setVelocityX(0);
+            }
             my.sprite.player.body.setAccelerationX(-this.ACCELERATION);
             // my.sprite.player.resetFlip();
             my.sprite.player.setFlip(true, false);
@@ -241,6 +244,9 @@ class Platformer extends Phaser.Scene {
             }
         }
         else if (this.dkey.isDown){
+            if (my.sprite.player.body.velocity.x < 0){
+                my.sprite.player.body.setVelocityX(0);
+            }
             my.sprite.player.body.setAccelerationX(this.ACCELERATION);
             // my.sprite.player.setFlip(true, false);
             my.sprite.player.resetFlip();
