@@ -10,7 +10,7 @@ class Platformer extends Phaser.Scene {
         this.ACCELERATION = 500; //500;
         this.DRAG = 900;    // DRAG < ACCELERATION = icy slide
         this.physics.world.gravity.y = 1200;//1200
-        this.JUMP_VELOCITY = -400;//-400
+        this.JUMP_VELOCITY = -350;//-400
     }
 
     preload(){
@@ -182,7 +182,7 @@ class Platformer extends Phaser.Scene {
             if (obj2.properties.danger) {
                 // Collided with a danger tile, handle collision
                 my.sprite.player.x = 45;
-                my.sprite.player.y = 45;
+                my.sprite.player.y = 250;
             }
 
         }
@@ -227,7 +227,7 @@ class Platformer extends Phaser.Scene {
 
          // PLAYER MOVEMENT (base structure from platformer section assignment)
         if (this.akey.isDown){
-            if (my.sprite.player.body.velocity.x > 0){
+            if (my.sprite.player.body.blocked.down && my.sprite.player.body.velocity.x > 0){
                 my.sprite.player.body.setVelocityX(0);
             }
             my.sprite.player.body.setAccelerationX(-this.ACCELERATION);
@@ -244,7 +244,7 @@ class Platformer extends Phaser.Scene {
             }
         }
         else if (this.dkey.isDown){
-            if (my.sprite.player.body.velocity.x < 0){
+            if (my.sprite.player.body.blocked.down && my.sprite.player.body.velocity.x < 0){
                 my.sprite.player.body.setVelocityX(0);
             }
             my.sprite.player.body.setAccelerationX(this.ACCELERATION);
@@ -305,10 +305,10 @@ class Platformer extends Phaser.Scene {
                 my.sprite.player.body.setVelocityY(this.JUMP_VELOCITY);
 
                 if (my.sprite.player.body.blocked.left){
-                    my.sprite.player.body.setVelocityX(400);
+                    my.sprite.player.body.setVelocityX(150);
                 }
                 else if (my.sprite.player.body.blocked.right){
-                    my.sprite.player.body.setVelocityX(-400);
+                    my.sprite.player.body.setVelocityX(-150);
                 }
                 this.jumps = 1;
                 my.vfx.jump.startFollow(my.sprite.player, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2, false);
