@@ -181,7 +181,7 @@ class Platformer extends Phaser.Scene {
             // Handle intersection with dangerous tiles
             if (obj2.properties.danger) {
                 // Collided with a danger tile, handle collision
-                my.sprite.player.x = 45;
+                my.sprite.player.x = 45; //500 ;//45;
                 my.sprite.player.y = 250;
             }
 
@@ -316,6 +316,14 @@ class Platformer extends Phaser.Scene {
                 my.vfx.jump.explode(2, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2);
                 // this.jump_sound.play();
             }
+        }
+
+        // wall slide to make platforming easier
+        if (((my.sprite.player.body.blocked.left || my.sprite.player.body.blocked.right) && !my.sprite.player.body.blocked.down) && !Phaser.Input.Keyboard.JustDown(this.spacekey) && my.sprite.player.body.velocity.y > 0){
+            this.physics.world.gravity.y = 300; // fall slower when sliding down wall
+        }
+        else{
+            this.physics.world.gravity.y = 1200; // default gravity when not wall sliding
         }
     }
 
