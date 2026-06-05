@@ -16,10 +16,20 @@ class Platformer extends Phaser.Scene {
     preload(){
         this.load.setPath("./assets/");
         this.load.image("player_character", "alienGreen_stand.png");
+        this.load.audio("jump_sound", "impactGlass_heavy_001.ogg");
+        this.load.audio("switch_touched", "powerUp2.ogg");
+        // this.load.audio("powered", "tone1.ogg");
+        this.load.audio("dead", "phaserDown1.ogg");
     }
 
     create(){
         let my = this.my;
+        
+        // Making Audio
+        this.jump_sound = this.sound.add("jump_sound", {loop: false, volume: 1});
+        this.switch_touched = this.sound.add("switch_touched", {loop: false, volume: 1});
+        // this.powered = this.sound.add("powered", {loop: false, volume: 1});
+        this.dead = this.sound.add("dead", {loop: false, volume: 1});
 
         // Addding MAP (Using same structure as platformer section assignment)
         this.map = this.add.tilemap("platformer_wall_jump_level", 18, 18, 100, 30);
@@ -28,6 +38,10 @@ class Platformer extends Phaser.Scene {
         // Adding tileset to map
         this.tileset = this.map.addTilesetImage("tilemap_packed", "tilemap_tiles_platformer");
         this.tileset2 = this.map.addTilesetImage("tilemap_packed2", "tilemap_tiles_construction");
+        this.background = this.map.addTilesetImage("backgrounds", "tilemap_background_sheet");
+
+        // Making background layer
+        this.backgroundLayer = this.map.createLayer("background", this.background, 0, 0);
 
         // Making ground layer
         this.groundLayer = this.map.createLayer("Ground-n-Platforms", this.tileset, 0, 0);
@@ -89,7 +103,7 @@ class Platformer extends Phaser.Scene {
         
 
 
-        // NOTE: Switch system code copied from professor's example
+        // NOTE: Base switch system code copied from professor's example
         //
         // Switch-controlled items
         //
@@ -141,6 +155,9 @@ class Platformer extends Phaser.Scene {
             // Look for moving left to right (-->)
             if (obj2.properties.switch
                 && my.sprite.player.body.acceleration.x > 0) {
+                    if (obj2.index == 31 || obj2.index == 10){ // makes sure sound only plays when updating switch
+                        this.switch_touched.play();
+                    }
                     this.all_switch_swap(11); // My helper function
                         // obj2.index = 11; // left leaning switch tile
                         for (let tile of this.leftSwitchable) {
@@ -156,6 +173,9 @@ class Platformer extends Phaser.Scene {
             // Look for moving right to left (<--)
             if (obj2.properties.switch 
                 && my.sprite.player.body.acceleration.x < 0) {
+                    if (obj2.index == 11 || obj2.index == 10){ // makes sure sound only plays when updating switch
+                        this.switch_touched.play();
+                    }
                         this.all_switch_swap(31); // My helper function
                         // obj2.index = 31; // right leaning switch tile
                         for (let tile of this.leftSwitchable) {
@@ -180,6 +200,7 @@ class Platformer extends Phaser.Scene {
 
             // Handle intersection with dangerous tiles
             if (obj2.properties.danger) {
+                this.dead.play();
                 // Collided with a danger tile, handle collision
                 my.sprite.player.x = 45; //500 ;//45;
                 my.sprite.player.y = 250;
@@ -299,7 +320,7 @@ class Platformer extends Phaser.Scene {
                 my.vfx.jump.startFollow(my.sprite.player, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2, false);
                 
                 my.vfx.jump.explode(2, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2);
-                // this.jump_sound.play();
+                this.jump_sound.play();
             }
             else if (this.walljump){
                 my.sprite.player.body.setVelocityY(this.JUMP_VELOCITY);
@@ -314,7 +335,7 @@ class Platformer extends Phaser.Scene {
                 my.vfx.jump.startFollow(my.sprite.player, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2, false);
                 
                 my.vfx.jump.explode(2, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2);
-                // this.jump_sound.play();
+                this.jump_sound.play();
             }
         }
 
