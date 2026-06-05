@@ -1,5 +1,5 @@
 const config = {
-    type: Phaser.CANVAS, //Phaser.AUTO,      // WebGL if possible
+    type: Phaser.AUTO, //Phaser.AUTO,      // WebGL if possible
     render: {
         pixelArt: true  // prevent pixel art from getting blurred when scaled
     },
@@ -16,7 +16,7 @@ const config = {
     width: 1200,
     height: 700,
     backgroundColor: "#1a1a2e",
-    scene: [Load, Platformer] // first scene in the list starts
+    scene: [TitleScene, Load, Platformer, CreditsScene, ControlsScene, WinScene] // first scene in the list starts
 };
 
 const game = new Phaser.Game(config);
