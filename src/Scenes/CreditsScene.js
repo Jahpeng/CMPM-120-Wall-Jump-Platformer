@@ -34,16 +34,20 @@ class CreditsScene extends Phaser.Scene {
         //     color: "#00ff88"
         // }).setOrigin(0.5);
 
-        this.add.text(600, 450, "AUDIO:", {
+        this.add.text(600, 420, "AUDIO:", {
             fontSize: "32px",
             color: "#ff7b00"
         }).setOrigin(0.5);
 
-        this.add.text(600, 490, "KENNEY DIGITAL AUDIO", {
+        this.add.text(600, 460, "KENNEY DIGITAL AUDIO", {
             fontSize: "20px",
             color: "#00ff88"
         }).setOrigin(0.5);
-        this.add.text(600, 520, "KENNEY IMPACT SOUNDS", {
+        this.add.text(600, 500, "KENNEY IMPACT SOUNDS", {
+            fontSize: "20px",
+            color: "#00ff88"
+        }).setOrigin(0.5);
+        this.add.text(600, 540, "GAME MUSIC BY: VIACHESLAV STAROSTIN ON PIXABAY", {
             fontSize: "20px",
             color: "#00ff88"
         }).setOrigin(0.5);
