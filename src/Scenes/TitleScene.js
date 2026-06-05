@@ -8,7 +8,7 @@ class TitleScene extends Phaser.Scene {
     preload(){}
 
     create(){
-        this.add.text(600, 180, "HARDCORE PARKOUR", {
+        this.add.text(600, 180, "PARKOUR MANIA", {
             fontSize: "64px",
             color: "#a200ff"
         }).setOrigin(0.5);
