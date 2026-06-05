@@ -18,8 +18,8 @@ class Platformer extends Phaser.Scene {
         this.load.image("player_character", "alienGreen_stand.png");
         this.load.audio("jump_sound", "impactGlass_heavy_001.ogg");
         this.load.audio("switch_touched", "powerUp2.ogg");
-        // this.load.audio("powered", "tone1.ogg");
         this.load.audio("dead", "phaserDown1.ogg");
+        this.load.audio("music", "game_music.mp3");
     }
 
     create(){
@@ -51,7 +51,7 @@ class Platformer extends Phaser.Scene {
 
 
         // PLAYER SPRITE SETUP
-        my.sprite.player = this.physics.add.sprite(1800, 40, "player_character").setScale(0.2);
+        my.sprite.player = this.physics.add.sprite(40, 40, "player_character").setScale(0.2); //1800
         my.sprite.player.setCollideWorldBounds(true);
         my.sprite.player.setMaxVelocity(200, 1000); // makes sure player doesnt become a speed demon
 
@@ -66,10 +66,12 @@ class Platformer extends Phaser.Scene {
 
 
         //PARTICLES
+
+        // particles for walking
         my.vfx.walking = this.add.particles(0, 0, "kenny-particles", {
             frame: ['star_01.png', 'star_04.png'],
             random: true,
-            scale: {start: 0.03, end: 0.1},
+            scale: {start: 0.03, end: 0.08},
             maxAliveParticles: 12,
             lifespan: 350,
             gravityY: -200,
@@ -79,19 +81,35 @@ class Platformer extends Phaser.Scene {
             blendMode: 'NORMAL',
         });
         my.vfx.walking.stop();
-
+        
+        // particles for jumping & wall jumping
         my.vfx.jump = this.add.particles(0, 0, "kenny-particles", {
             frame: "dirt_02.png",
-            lifespan: 350,
+            lifespan: 380,
+            // scale: { start: 0.2, end: 0 },
+            quantity: 1, // 1
+            // maxAliveParticles: 8,
+            // alpha: {start: 1, end: 0.1},
+            speed: { min: 20, max: 80 },
+            scale: { start: 0.07, end: 0 },
+            alpha: { start: 1, end: 0 },
+        })
+        my.vfx.jump.stop();
+        
+        // particles for interacting with switches
+        my.vfx.env = this.add.particles(0, 0, "kenny-particles", {
+            frame: "circle_01.png",
+            lifespan: 200,
             // scale: { start: 0.2, end: 0 },
             quantity: 1,
             // // maxAliveParticles: 8,
             // alpha: {start: 1, end: 0.1},
             speed: { min: 20, max: 80 },
-            scale: { start: 0.1, end: 0 },
+            scale: { start: 0.05, end: 0 },
             alpha: { start: 1, end: 0 },
+            tint: 0xffff00,
         })
-        my.vfx.jump.stop();
+        my.vfx.env.stop();
 
         // NOTE: Base Camera Code Copied From Professor's Platformer Example 
         // Simple camera to follow player
@@ -100,7 +118,9 @@ class Platformer extends Phaser.Scene {
         this.cameras.main.setDeadzone(50, 50);
         this.cameras.main.setZoom(2);
 
-        
+        // play music over game
+        this.music = this.sound.add("music", {volume: 0.1, loop: true});
+        this.music.play();
 
 
         // NOTE: Base switch system code copied from professor's example
@@ -156,6 +176,8 @@ class Platformer extends Phaser.Scene {
             if (obj2.properties.switch
                 && my.sprite.player.body.acceleration.x > 0) {
                     if (obj2.index == 31 || obj2.index == 10){ // makes sure sound only plays when updating switch
+                        my.vfx.env.startFollow(my.sprite.player, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2, false);
+                        my.vfx.env.explode(2, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2);
                         this.switch_touched.play();
                     }
                     this.all_switch_swap(11); // My helper function
@@ -173,6 +195,8 @@ class Platformer extends Phaser.Scene {
             // Look for moving right to left (<--)
             if (obj2.properties.switch 
                 && my.sprite.player.body.acceleration.x < 0) {
+                    my.vfx.env.startFollow(my.sprite.player, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2, false);
+                    my.vfx.env.explode(2, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2);
                     if (obj2.index == 11 || obj2.index == 10){ // makes sure sound only plays when updating switch
                         this.switch_touched.play();
                     }
@@ -208,6 +232,7 @@ class Platformer extends Phaser.Scene {
 
             // Handles win condition
             if (obj2.properties.exit){
+                this.music.stop();
                 this.scene.start("winScene");
             }
 
@@ -222,7 +247,7 @@ class Platformer extends Phaser.Scene {
         this.physics.add.collider(my.sprite.player, this.groundLayer, 
             propertyCollider, collisionProcess);
 
-        //// END of professor switch code
+
     }
 
     // Helper function I wrote to change all switches to match current state
@@ -324,7 +349,7 @@ class Platformer extends Phaser.Scene {
                 this.jumps += 1;
                 my.vfx.jump.startFollow(my.sprite.player, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2, false);
                 
-                my.vfx.jump.explode(2, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2);
+                my.vfx.jump.explode(3, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2);
                 this.jump_sound.play();
             }
             else if (this.walljump){
@@ -339,7 +364,7 @@ class Platformer extends Phaser.Scene {
                 this.jumps = 1;
                 my.vfx.jump.startFollow(my.sprite.player, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2, false);
                 
-                my.vfx.jump.explode(2, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2);
+                my.vfx.jump.explode(3, my.sprite.player.displayWidth/2, my.sprite.player.displayHeight/2);
                 this.jump_sound.play();
             }
         }
