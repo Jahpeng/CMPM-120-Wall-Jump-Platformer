@@ -166,6 +166,12 @@
     <property name="collides" type="bool" value="true"/>
    </properties>
   </tile>
+  <tile id="112">
+   <properties>
+    <property name="collides" type="bool" value="true"/>
+    <property name="exit" type="bool" value="true"/>
+   </properties>
+  </tile>
   <tile id="120">
    <properties>
     <property name="collides" type="bool" value="true"/>

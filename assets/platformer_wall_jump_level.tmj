@@ -414,6 +414,20 @@
                         }]
                 }, 
                 {
+                 "id":112,
+                 "properties":[
+                        {
+                         "name":"collides",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"exit",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
                  "id":120,
                  "properties":[
                         {

@@ -51,7 +51,7 @@ class Platformer extends Phaser.Scene {
 
 
         // PLAYER SPRITE SETUP
-        my.sprite.player = this.physics.add.sprite(40, 40, "player_character").setScale(0.2);
+        my.sprite.player = this.physics.add.sprite(1800, 40, "player_character").setScale(0.2);
         my.sprite.player.setCollideWorldBounds(true);
         my.sprite.player.setMaxVelocity(200, 1000); // makes sure player doesnt become a speed demon
 
@@ -204,6 +204,11 @@ class Platformer extends Phaser.Scene {
                 // Collided with a danger tile, handle collision
                 my.sprite.player.x = 45; //500 ;//45;
                 my.sprite.player.y = 250;
+            }
+
+            // Handles win condition
+            if (obj2.properties.exit){
+                this.scene.start("winScene");
             }
 
         }
